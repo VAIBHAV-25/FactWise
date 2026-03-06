@@ -12,7 +12,7 @@ const Index = () => {
   const locations = new Set(employees.map((e) => e.location)).size;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background flex flex-col">
       <header className="border-b border-border bg-card">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div>
@@ -31,7 +31,7 @@ const Index = () => {
         </div>
       </header>
 
-      <main className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+      <main className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6 flex-1">
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
           <StatCard title="Employees" value={totalEmployees} icon={Users} subtitle={`${activeCount} active`} trend="up" />
           <StatCard title="Avg Salary" value={`$${avgSalary.toLocaleString()}`} icon={DollarSign} />
@@ -48,6 +48,22 @@ const Index = () => {
           <EmployeeGrid />
         </div>
       </main>
+
+      <footer className="border-t border-border bg-card mt-auto">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <p className="text-sm text-muted-foreground text-center">
+            Made by{" "}
+            <a
+              href="https://www.linkedin.com/in/vaibhav-singhvi-p16102001/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary hover:underline font-medium"
+            >
+              Vaibhav Singhvi
+            </a>
+          </p>
+        </div>
+      </footer>
     </div>
   );
 };
