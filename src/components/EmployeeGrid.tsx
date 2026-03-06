@@ -1,17 +1,15 @@
 import { useMemo, useCallback, useRef } from "react";
 import { AgGridReact } from "ag-grid-react";
-import {
-  AllCommunityModule,
-  ModuleRegistry,
+import type {
   ColDef,
   ValueFormatterParams,
   ICellRendererParams,
   GridReadyEvent,
   GridApi,
 } from "ag-grid-community";
+import "ag-grid-community/styles/ag-grid.css";
+import "ag-grid-community/styles/ag-theme-alpine.css";
 import { employees, Employee } from "@/data/employees";
-
-ModuleRegistry.registerModules([AllCommunityModule]);
 
 const StatusRenderer = (params: ICellRendererParams<Employee>) => {
   const active = params.value;
