@@ -203,6 +203,17 @@ const EmployeeGrid = () => {
   const [isFiltered, setIsFiltered] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   const onFilterChanged = useCallback(() => {
     const api = gridRef.current?.api;
@@ -216,24 +227,26 @@ const EmployeeGrid = () => {
     setIsFiltered(false);
   }, []);
 
-  const columnDefs = useMemo<ColDef<Employee>[]>(
-    () => [
+  const columnDefs = useMemo<ColDef<Employee>[]>(() => {
+    return [
       {
         headerName: "Employee",
         field: "firstName",
-        minWidth: 212,
-        flex: 2,
+        minWidth: isMobile ? 180 : 212,
+        flex: isMobile ? 1.5 : 2,
+        pinned: isMobile ? "left" : undefined,
+        lockPinned: isMobile ? true : false,
         valueGetter: (p) => `${p.data?.firstName} ${p.data?.lastName}`,
         cellRenderer: (params: ICellRendererParams<Employee>) => (
-          <div className="flex items-center gap-3 h-full w-full">
-            <div className="h-9 w-9 rounded-full bg-primary/8 flex items-center justify-center shrink-0 border border-primary/15">
-              <span className="text-xs font-bold text-primary">
+          <div className="flex items-center gap-2 sm:gap-3 h-full w-full">
+            <div className="h-8 w-8 sm:h-9 sm:w-9 rounded-full bg-primary/8 flex items-center justify-center shrink-0 border border-primary/15">
+              <span className="text-[10px] sm:text-xs font-bold text-primary">
                 {params.data?.firstName?.[0]}{params.data?.lastName?.[0]}
               </span>
             </div>
             <div className="min-w-0">
-              <p className="text-[12px] font-semibold text-foreground leading-tight truncate">{params.value}</p>
-              <p className="text-[10px] text-muted-foreground leading-tight mt-0.5 truncate">{params.data?.email}</p>
+              <p className="text-[11px] sm:text-[12px] font-semibold text-foreground leading-tight truncate">{params.value}</p>
+              <p className="text-[9px] sm:text-[10px] text-muted-foreground leading-tight mt-0.5 truncate">{params.data?.email}</p>
             </div>
           </div>
         ),
@@ -241,29 +254,31 @@ const EmployeeGrid = () => {
       {
         headerName: "Department",
         field: "department",
-        minWidth: 130,
+        minWidth: isMobile ? 100 : 130,
         flex: 1,
         cellRenderer: DepartmentRenderer,
         filter: true,
+        hide: isMobile,
       },
       {
         headerName: "Position",
         field: "position",
-        minWidth: 170,
-        flex: 1.3,
+        minWidth: isMobile ? 120 : 170,
+        flex: isMobile ? 1 : 1.3,
         cellStyle: { color: "hsl(220 25% 18%)", fontWeight: 500 },
+        hide: isMobile,
       },
       {
         headerName: "Location",
         field: "location",
-        minWidth: 110,
-        flex: 0.8,
+        minWidth: isMobile ? 90 : 110,
+        flex: isMobile ? 0.6 : 0.8,
       },
       {
         headerName: "Salary",
         field: "salary",
-        minWidth: 110,
-        flex: 0.8,
+        minWidth: isMobile ? 85 : 110,
+        flex: isMobile ? 0.6 : 0.8,
         type: "numericColumn",
         cellStyle: { fontWeight: 600, fontFeatureSettings: "'tnum'" },
         valueFormatter: (p: ValueFormatterParams) =>
@@ -272,34 +287,35 @@ const EmployeeGrid = () => {
       {
         headerName: "Rating",
         field: "performanceRating",
-        minWidth: 110,
-        flex: 0.8,
+        minWidth: isMobile ? 80 : 110,
+        flex: isMobile ? 0.6 : 0.8,
         cellRenderer: RatingRenderer,
       },
       {
         headerName: "Projects",
         field: "projectsCompleted",
-        minWidth: 80,
-        flex: 0.5,
+        minWidth: isMobile ? 65 : 80,
+        flex: isMobile ? 0.4 : 0.5,
         type: "numericColumn",
         cellStyle: { fontWeight: 600, fontFeatureSettings: "'tnum'" },
       },
       {
         headerName: "Skills",
         field: "skills",
-        minWidth: 120,
-        flex: 1,
-        maxWidth: 150,
+        minWidth: isMobile ? 100 : 120,
+        flex: isMobile ? 0.8 : 1,
+        maxWidth: isMobile ? 120 : 150,
         cellRenderer: SkillsRenderer,
         sortable: false,
         filter: true,
-        cellStyle: { overflow: "hidden", padding: "0 12px" },
+        cellStyle: { overflow: "hidden", padding: isMobile ? "0 8px" : "0 12px" },
+        hide: isMobile,
       },
       {
         headerName: "Status",
         field: "isActive",
-        minWidth: 105,
-        flex: 0.7,
+        minWidth: isMobile ? 75 : 105,
+        flex: isMobile ? 0.5 : 0.7,
         cellRenderer: StatusRenderer,
         filter: "agSetColumnFilter",
         filterParams: {
@@ -314,9 +330,8 @@ const EmployeeGrid = () => {
           return params.value === true ? "Active" : "Inactive";
         },
       },
-    ],
-    []
-  );
+    ];
+  }, [isMobile]);
 
   const defaultColDef = useMemo<ColDef>(
     () => ({
@@ -340,6 +355,12 @@ const EmployeeGrid = () => {
     params.api.sizeColumnsToFit();
   }, []);
 
+  useEffect(() => {
+    if (gridRef.current?.api) {
+      gridRef.current.api.sizeColumnsToFit();
+    }
+  }, [isMobile]);
+
   const onCellClicked = useCallback((event: CellClickedEvent<Employee>) => {
     if (event.data) {
       setSelectedEmployee(event.data);
@@ -353,19 +374,20 @@ const EmployeeGrid = () => {
   };
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-2 w-full overflow-hidden">
       {isFiltered && (
-        <div className="flex items-center justify-end">
+        <div className="flex items-center justify-end px-2 sm:px-0">
           <button
             onClick={clearAllFilters}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-muted hover:bg-muted/80 text-muted-foreground text-xs font-semibold transition-colors"
+            className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg bg-muted hover:bg-muted/80 text-muted-foreground text-[10px] sm:text-xs font-semibold transition-colors"
           >
-            <RotateCcw className="h-3.5 w-3.5" />
-            Reset Filter
+            <RotateCcw className="h-3 sm:h-3.5 w-3 sm:w-3.5" />
+            <span className="hidden sm:inline">Reset Filter</span>
+            <span className="sm:hidden">Reset</span>
           </button>
         </div>
       )}
-      <div className="ag-theme-alpine ag-theme-custom w-full h-[400px] rounded-xl border border-border overflow-hidden bg-card shadow-sm">
+      <div className="ag-theme-alpine ag-theme-custom w-full h-[400px] sm:h-[500px] rounded-xl border border-border overflow-hidden bg-card shadow-sm">
         <AgGridReact<Employee>
           ref={gridRef}
           rowData={employees}
@@ -384,11 +406,13 @@ const EmployeeGrid = () => {
           enableCellTextSelection
           domLayout="normal"
           suppressMenuHide={true}
+          suppressHorizontalScroll={false}
+          suppressColumnVirtualisation={false}
         />
       </div>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto w-[95vw] sm:w-full mx-2 sm:mx-auto">
           <DialogHeader>
             <DialogTitle className="text-2xl">Employee Details</DialogTitle>
             <DialogDescription>
