@@ -1,4 +1,4 @@
-import { useMemo, useCallback, useRef } from "react";
+import { useMemo, useCallback, useRef, useState } from "react";
 import { AgGridReact } from "ag-grid-react";
 import type {
   ColDef,
@@ -86,6 +86,19 @@ const DepartmentRenderer = (params: ICellRendererParams<Employee>) => {
 
 const EmployeeGrid = () => {
   const gridRef = useRef<AgGridReact<Employee>>(null);
+  const [isFiltered, setIsFiltered] = useState(false);
+
+  const onFilterChanged = useCallback(() => {
+    const api = gridRef.current?.api;
+    if (!api) return;
+    const model = api.getFilterModel();
+    setIsFiltered(Object.keys(model).length > 0);
+  }, []);
+
+  const clearAllFilters = useCallback(() => {
+    gridRef.current?.api?.setFilterModel(null);
+    setIsFiltered(false);
+  }, []);
 
   const columnDefs = useMemo<ColDef<Employee>[]>(
     () => [
@@ -194,23 +207,37 @@ const EmployeeGrid = () => {
   }, []);
 
   return (
-    <div className="ag-theme-alpine ag-theme-custom w-full h-[620px] rounded-xl border border-border overflow-hidden bg-card shadow-sm">
-      <AgGridReact<Employee>
-        ref={gridRef}
-        rowData={employees}
-        columnDefs={columnDefs}
-        defaultColDef={defaultColDef}
-        onGridReady={onGridReady}
-        onGridSizeChanged={onGridSizeChanged}
-        animateRows
-        rowSelection="multiple"
-        pagination
-        paginationPageSize={10}
-        paginationPageSizeSelector={[10, 20, 50]}
-        suppressCellFocus
-        enableCellTextSelection
-        domLayout="normal"
-      />
+    <div className="space-y-2">
+      {isFiltered && (
+        <div className="flex items-center justify-end">
+          <button
+            onClick={clearAllFilters}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-destructive/10 text-destructive text-xs font-semibold hover:bg-destructive/20 transition-colors"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            Clear Filters
+          </button>
+        </div>
+      )}
+      <div className="ag-theme-alpine ag-theme-custom w-full h-[620px] rounded-xl border border-border overflow-hidden bg-card shadow-sm">
+        <AgGridReact<Employee>
+          ref={gridRef}
+          rowData={employees}
+          columnDefs={columnDefs}
+          defaultColDef={defaultColDef}
+          onGridReady={onGridReady}
+          onGridSizeChanged={onGridSizeChanged}
+          onFilterChanged={onFilterChanged}
+          animateRows
+          rowSelection="multiple"
+          pagination
+          paginationPageSize={10}
+          paginationPageSizeSelector={[10, 20, 50]}
+          suppressCellFocus
+          enableCellTextSelection
+          domLayout="normal"
+        />
+      </div>
     </div>
   );
 };
