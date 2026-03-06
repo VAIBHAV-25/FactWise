@@ -204,7 +204,7 @@ const EmployeeGrid = () => {
   }, []);
 
   return (
-    <div className="ag-theme-custom w-full h-[600px] rounded-xl border border-border overflow-hidden bg-card">
+    <div className="ag-theme-alpine ag-theme-custom w-full h-[600px] rounded-xl border border-border overflow-hidden bg-card">
       <AgGridReact<Employee>
         ref={gridRef}
         rowData={employees}
