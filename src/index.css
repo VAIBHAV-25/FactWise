@@ -334,3 +334,523 @@
   margin-bottom: 0 !important;
   padding-bottom: 0 !important;
 }
+
+/* ─────────────────────────────────────────
+   AG Grid – Polished Filter Panel Styles
+   ───────────────────────────────────────── */
+
+/* Font inherit for all filter elements */
+.ag-theme-custom .ag-menu,
+.ag-theme-custom .ag-filter-body-wrapper,
+.ag-theme-custom .ag-filter-toolpanel-instance {
+  font-family: 'DM Sans', sans-serif !important;
+}
+
+/* ── Floating menu popup card ── */
+.ag-theme-custom .ag-menu {
+  background: hsl(0 0% 100%) !important;
+  border: 1px solid hsl(220 16% 90%) !important;
+  border-radius: 14px !important;
+  box-shadow:
+    0 4px 6px -1px hsl(220 25% 10% / 0.07),
+    0 12px 32px -4px hsl(220 25% 10% / 0.13) !important;
+  /* NO overflow:hidden — it clips the picker dropdown list in AG Grid v32 */
+  overflow: visible !important;
+  min-width: 244px !important;
+  padding: 0 !important;
+  animation: filter-pop 0.17s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+@keyframes filter-pop {
+  from { opacity: 0; transform: translateY(-5px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0)   scale(1); }
+}
+
+/* ── Tab strip (Filter | General) ── */
+/* Clip top corners here instead of on .ag-menu so overflow:visible works */
+.ag-theme-custom .ag-tabs-header {
+  background: hsl(220 14% 96%) !important;
+  border-bottom: 1px solid hsl(220 16% 90%) !important;
+  border-radius: 14px 14px 0 0 !important;
+  padding: 6px 8px 0 !important;
+  display: flex !important;
+  gap: 4px !important;
+}
+
+.ag-theme-custom .ag-tab {
+  border-radius: 8px 8px 0 0 !important;
+  padding: 6px 14px !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.04em !important;
+  color: hsl(220 10% 46%) !important;
+  border: none !important;
+  background: transparent !important;
+  cursor: pointer !important;
+  transition: color 0.15s, background 0.15s !important;
+}
+
+.ag-theme-custom .ag-tab:hover {
+  color: hsl(220 72% 50%) !important;
+  background: hsl(220 72% 50% / 0.07) !important;
+}
+
+.ag-theme-custom .ag-tab-selected {
+  color: hsl(220 72% 50%) !important;
+  background: hsl(0 0% 100%) !important;
+  border-bottom: 2px solid hsl(220 72% 50%) !important;
+}
+
+.ag-theme-custom .ag-tabs-body {
+  padding: 0 !important;
+}
+
+/* ── Filter body: flex column with gap ── */
+.ag-theme-custom .ag-filter-body-wrapper {
+  padding: 12px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+}
+
+/* ── Condition type dropdown ── */
+/* AG Grid renders this as a custom .ag-picker-field (outer) containing
+   .ag-picker-field-wrapper (text) + .ag-picker-field-icon (arrow).
+   Style the OUTER container only — do NOT touch the wrapper child. */
+.ag-theme-custom .ag-filter-body-wrapper .ag-picker-field {
+  display: flex !important;
+  align-items: center !important;
+  height: 36px !important;
+  padding: 0 10px !important;
+  border: 1.5px solid hsl(220 16% 86%) !important;
+  border-radius: 9px !important;
+  background: hsl(220 20% 98%) !important;
+  box-shadow: 0 1px 2px hsl(220 20% 10% / 0.04) !important;
+  cursor: pointer !important;
+  transition: border-color 0.15s, box-shadow 0.15s, background 0.15s !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.ag-theme-custom .ag-filter-body-wrapper .ag-picker-field:hover,
+.ag-theme-custom .ag-filter-body-wrapper .ag-picker-field:focus-within {
+  border-color: hsl(220 72% 50%) !important;
+  box-shadow: 0 0 0 3px hsl(220 72% 50% / 0.11) !important;
+  background: hsl(0 0% 100%) !important;
+}
+
+.ag-theme-custom .ag-filter-body-wrapper .ag-picker-field-wrapper {
+  flex: 1 !important;
+  min-width: 0 !important;
+  /* No border/background/height here — it's just the text node */
+  border: none !important;
+  background: transparent !important;
+  padding: 0 !important;
+  height: auto !important;
+  box-shadow: none !important;
+}
+
+.ag-theme-custom .ag-filter-body-wrapper .ag-picker-field-display {
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  color: hsl(220 25% 18%) !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.ag-theme-custom .ag-filter-body-wrapper .ag-picker-field-icon {
+  color: hsl(220 10% 52%) !important;
+  display: flex !important;
+  align-items: center !important;
+  flex-shrink: 0 !important;
+  margin-left: 4px !important;
+}
+
+/* ── Text / Number value inputs ── */
+/* Target only inputs inside the filter body, not hidden internals */
+.ag-theme-custom .ag-filter-body-wrapper .ag-text-field-input,
+.ag-theme-custom .ag-filter-body-wrapper .ag-number-field-input,
+.ag-theme-custom .ag-filter-body-wrapper input.ag-input-field-input {
+  width: 100% !important;
+  height: 36px !important;
+  padding: 0 12px !important;
+  border: 1.5px solid hsl(220 16% 86%) !important;
+  border-radius: 9px !important;
+  background: hsl(220 20% 98%) !important;
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  color: hsl(220 25% 18%) !important;
+  box-shadow: 0 1px 2px hsl(220 20% 10% / 0.04) !important;
+  transition: border-color 0.15s, box-shadow 0.15s, background 0.15s !important;
+  outline: none !important;
+  box-sizing: border-box !important;
+}
+
+.ag-theme-custom .ag-filter-body-wrapper .ag-text-field-input::placeholder,
+.ag-theme-custom .ag-filter-body-wrapper .ag-number-field-input::placeholder,
+.ag-theme-custom .ag-filter-body-wrapper input.ag-input-field-input::placeholder {
+  color: hsl(220 10% 62%) !important;
+}
+
+.ag-theme-custom .ag-filter-body-wrapper .ag-text-field-input:focus,
+.ag-theme-custom .ag-filter-body-wrapper .ag-number-field-input:focus,
+.ag-theme-custom .ag-filter-body-wrapper input.ag-input-field-input:focus {
+  border-color: hsl(220 72% 50%) !important;
+  box-shadow: 0 0 0 3px hsl(220 72% 50% / 0.12) !important;
+  background: hsl(0 0% 100%) !important;
+}
+
+/* Wrapper around each input field — reset any default border/bg */
+.ag-theme-custom .ag-filter-body-wrapper .ag-text-field,
+.ag-theme-custom .ag-filter-body-wrapper .ag-number-field {
+  width: 100% !important;
+  border: none !important;
+  background: transparent !important;
+  padding: 0 !important;
+}
+
+/* ── AND / OR condition operator pills ── */
+.ag-theme-custom .ag-filter-condition-operator {
+  display: flex !important;
+  gap: 6px !important;
+  align-items: center !important;
+}
+
+.ag-theme-custom .ag-filter-condition-operator label {
+  flex: 1 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 5px !important;
+  padding: 5px 0 !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.05em !important;
+  color: hsl(220 10% 46%) !important;
+  border: 1.5px solid hsl(220 16% 86%) !important;
+  border-radius: 8px !important;
+  cursor: pointer !important;
+  transition: border-color 0.12s, background 0.12s, color 0.12s !important;
+  user-select: none !important;
+}
+
+.ag-theme-custom .ag-filter-condition-operator label:has(input:checked) {
+  border-color: hsl(220 72% 50%) !important;
+  background: hsl(220 72% 50% / 0.09) !important;
+  color: hsl(220 72% 50%) !important;
+}
+
+.ag-theme-custom .ag-filter-condition-operator input[type="radio"] {
+  display: none !important;
+}
+
+/* ── Apply / Reset / Clear button row ── */
+/* Bottom-corner radius here since .ag-menu has overflow:visible */
+.ag-theme-custom .ag-filter-apply-panel {
+  display: flex !important;
+  gap: 7px !important;
+  padding: 9px 12px 12px !important;
+  border-top: 1px solid hsl(220 16% 91%) !important;
+  background: hsl(220 14% 96%) !important;
+  border-radius: 0 0 14px 14px !important;
+}
+
+.ag-theme-custom .ag-filter-apply-panel button {
+  flex: 1 !important;
+  height: 31px !important;
+  border-radius: 8px !important;
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  border: none !important;
+  outline: none !important;
+  transition: background 0.15s, box-shadow 0.15s, transform 0.1s !important;
+}
+
+/* First button = Apply */
+.ag-theme-custom .ag-filter-apply-panel button:first-child {
+  background: hsl(220 72% 50%) !important;
+  color: #fff !important;
+  box-shadow: 0 2px 7px hsl(220 72% 50% / 0.28) !important;
+}
+
+.ag-theme-custom .ag-filter-apply-panel button:first-child:hover {
+  background: hsl(220 72% 44%) !important;
+  box-shadow: 0 4px 14px hsl(220 72% 50% / 0.38) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* Other buttons (Reset / Clear) */
+.ag-theme-custom .ag-filter-apply-panel button:not(:first-child) {
+  background: hsl(220 14% 90%) !important;
+  color: hsl(220 25% 18%) !important;
+}
+
+.ag-theme-custom .ag-filter-apply-panel button:not(:first-child):hover {
+  background: hsl(220 14% 84%) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* ── Set column filter (checkbox list) ── */
+.ag-theme-custom .ag-set-filter-list {
+  max-height: 210px !important;
+  overflow-y: auto !important;
+  padding: 4px !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: hsl(220 16% 84%) transparent !important;
+}
+
+.ag-theme-custom .ag-set-filter-list::-webkit-scrollbar { width: 4px !important; }
+.ag-theme-custom .ag-set-filter-list::-webkit-scrollbar-track { background: transparent !important; }
+.ag-theme-custom .ag-set-filter-list::-webkit-scrollbar-thumb {
+  background: hsl(220 16% 82%) !important;
+  border-radius: 99px !important;
+}
+
+.ag-theme-custom .ag-set-filter-item {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 6px 10px !important;
+  margin: 1px 4px !important;
+  border-radius: 7px !important;
+  cursor: pointer !important;
+  transition: background 0.12s !important;
+}
+
+.ag-theme-custom .ag-set-filter-item:hover {
+  background: hsl(220 72% 50% / 0.07) !important;
+}
+
+.ag-theme-custom .ag-set-filter-item-value {
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  color: hsl(220 25% 18%) !important;
+}
+
+/* ── Custom checkboxes ── */
+.ag-theme-custom .ag-checkbox-input-wrapper {
+  position: relative !important;
+  width: 16px !important;
+  height: 16px !important;
+  flex-shrink: 0 !important;
+  border: 1.5px solid hsl(220 16% 78%) !important;
+  border-radius: 5px !important;
+  background: hsl(0 0% 100%) !important;
+  transition: border-color 0.14s, background 0.14s, box-shadow 0.14s !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.ag-theme-custom .ag-checkbox-input-wrapper.ag-checked {
+  background: hsl(220 72% 50%) !important;
+  border-color: hsl(220 72% 50%) !important;
+  box-shadow: 0 0 0 3px hsl(220 72% 50% / 0.15) !important;
+}
+
+.ag-theme-custom .ag-checkbox-input-wrapper::after {
+  content: "" !important;
+  width: 9px !important;
+  height: 9px !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpolyline points='1.5,6 4.5,9 10.5,3' stroke='white' stroke-width='2.2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-size: contain !important;
+  opacity: 0 !important;
+  transform: scale(0.5) !important;
+  transition: opacity 0.12s, transform 0.12s !important;
+}
+
+.ag-theme-custom .ag-checkbox-input-wrapper.ag-checked::after {
+  opacity: 1 !important;
+  transform: scale(1) !important;
+}
+
+.ag-theme-custom .ag-checkbox-input {
+  position: absolute !important;
+  inset: 0 !important;
+  opacity: 0 !important;
+  cursor: pointer !important;
+  margin: 0 !important;
+}
+
+/* ── Mini search box inside set filter ── */
+.ag-theme-custom .ag-mini-filter {
+  padding: 8px 10px 6px !important;
+  border-bottom: 1px solid hsl(220 16% 91%) !important;
+}
+
+.ag-theme-custom .ag-mini-filter input.ag-input-field-input {
+  height: 31px !important;
+  padding: 0 10px !important;
+  border: 1.5px solid hsl(220 16% 86%) !important;
+  border-radius: 7px !important;
+  background: hsl(220 20% 98%) !important;
+  font-size: 12px !important;
+  font-family: 'DM Sans', sans-serif !important;
+  color: hsl(220 25% 18%) !important;
+  outline: none !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  transition: border-color 0.15s, box-shadow 0.15s !important;
+}
+
+.ag-theme-custom .ag-mini-filter input.ag-input-field-input:focus {
+  border-color: hsl(220 72% 50%) !important;
+  box-shadow: 0 0 0 3px hsl(220 72% 50% / 0.11) !important;
+  background: hsl(0 0% 100%) !important;
+}
+
+/* ── Select All row ── */
+.ag-theme-custom .ag-set-filter-select-all {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 7px 14px !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.07em !important;
+  text-transform: uppercase !important;
+  color: hsl(220 10% 46%) !important;
+  border-bottom: 1px solid hsl(220 16% 91%) !important;
+}
+
+/* ── No-matches empty state ── */
+.ag-theme-custom .ag-filter-no-matches {
+  padding: 20px 14px !important;
+  text-align: center !important;
+  font-size: 12px !important;
+  font-style: italic !important;
+  color: hsl(220 10% 58%) !important;
+}
+
+/* ── General tab menu items ── */
+.ag-theme-custom .ag-menu-option {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 8px 14px !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  color: hsl(220 25% 18%) !important;
+  cursor: pointer !important;
+  transition: background 0.12s, color 0.12s !important;
+}
+
+.ag-theme-custom .ag-menu-option:hover {
+  background: hsl(220 72% 50% / 0.06) !important;
+  color: hsl(220 72% 50%) !important;
+}
+
+.ag-theme-custom .ag-menu-option:hover .ag-menu-option-icon {
+  color: hsl(220 72% 50%) !important;
+}
+
+.ag-theme-custom .ag-menu-option-icon {
+  color: hsl(220 10% 55%) !important;
+  width: 16px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.ag-theme-custom .ag-menu-separator {
+  height: 1px !important;
+  background: hsl(220 16% 91%) !important;
+  margin: 3px 0 !important;
+}
+/* ── Picker dropdown list (.ag-select-list) ──
+   In AG Grid v32 the condition-type select renders a floating .ag-select-list
+   as a child of .ag-popup / .ag-menu. overflow:visible on .ag-menu lets it
+   escape, but it also needs its own styling and z-index. */
+.ag-theme-custom .ag-select-list,
+.ag-theme-custom .ag-popup .ag-select-list,
+.ag-select-list {
+  background: hsl(0 0% 100%) !important;
+  border: 1.5px solid hsl(220 16% 88%) !important;
+  border-radius: 12px !important;
+  box-shadow:
+    0 2px 4px -1px hsl(220 25% 10% / 0.06),
+    0 8px 20px -4px hsl(220 25% 10% / 0.11),
+    0 0 0 1px hsl(220 72% 50% / 0.05) !important;
+  padding: 6px !important;
+  z-index: 99999 !important;
+  overflow: hidden !important;
+  min-width: 180px !important;
+  animation: select-drop 0.16s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+@keyframes select-drop {
+  from { opacity: 0; transform: translateY(-4px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0)   scale(1); }
+}
+
+.ag-theme-custom .ag-select-list .ag-list-item,
+.ag-select-list .ag-list-item {
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  padding: 9px 14px 9px 16px !important;
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  color: hsl(220 20% 26%) !important;
+  border-radius: 8px !important;
+  cursor: pointer !important;
+  transition: background 0.12s, color 0.12s, padding-left 0.12s !important;
+  letter-spacing: 0.01em !important;
+  margin: 1px 0 !important;
+}
+
+/* Subtle divider between items (except last) */
+.ag-theme-custom .ag-select-list .ag-list-item:not(:last-child)::after,
+.ag-select-list .ag-list-item:not(:last-child)::after {
+  content: "" !important;
+  position: absolute !important;
+  bottom: -1px !important;
+  left: 14px !important;
+  right: 14px !important;
+  height: 1px !important;
+  background: hsl(220 16% 94%) !important;
+}
+
+.ag-theme-custom .ag-select-list .ag-list-item:hover,
+.ag-select-list .ag-list-item:hover {
+  background: hsl(220 72% 50% / 0.07) !important;
+  color: hsl(220 72% 44%) !important;
+  padding-left: 20px !important;
+}
+
+/* Active / selected item — left-accent bar */
+.ag-theme-custom .ag-select-list .ag-list-item.ag-active-item,
+.ag-select-list .ag-list-item.ag-active-item {
+  background: hsl(220 72% 50% / 0.09) !important;
+  color: hsl(220 72% 44%) !important;
+  font-weight: 700 !important;
+  padding-left: 20px !important;
+}
+
+.ag-theme-custom .ag-select-list .ag-list-item.ag-active-item::before,
+.ag-select-list .ag-list-item.ag-active-item::before {
+  content: "" !important;
+  position: absolute !important;
+  left: 6px !important;
+  top: 25% !important;
+  bottom: 25% !important;
+  width: 3px !important;
+  border-radius: 99px !important;
+  background: hsl(220 72% 50%) !important;
+}
+
+/* Ensure the popup wrapper itself doesn't clip the select list */
+.ag-theme-custom .ag-popup {
+  overflow: visible !important;
+}
+
+/* When no apply buttons: the filter body is the last child — round its bottom */
+.ag-theme-custom .ag-filter-body-wrapper:last-child {
+  border-radius: 0 0 14px 14px !important;
+}

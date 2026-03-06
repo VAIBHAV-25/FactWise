@@ -237,6 +237,9 @@ const EmployeeGrid = () => {
         pinned: isMobile ? "left" : undefined,
         lockPinned: isMobile ? true : false,
         valueGetter: (p) => `${p.data?.firstName} ${p.data?.lastName}`,
+        filterValueGetter: (p) => `${p.data?.firstName} ${p.data?.lastName}`,
+        filter: "agTextColumnFilter",
+        filterParams: { filterOptions: ["contains", "startsWith", "endsWith"], defaultOption: "contains" },
         cellRenderer: (params: ICellRendererParams<Employee>) => (
           <div className="flex items-center gap-2 sm:gap-3 h-full w-full">
             <div className="h-8 w-8 sm:h-9 sm:w-9 rounded-full bg-primary/8 flex items-center justify-center shrink-0 border border-primary/15">
@@ -257,7 +260,8 @@ const EmployeeGrid = () => {
         minWidth: isMobile ? 100 : 130,
         flex: 1,
         cellRenderer: DepartmentRenderer,
-        filter: true,
+        filter: "agSetColumnFilter",
+        filterParams: { suppressSelectAll: false, suppressSorting: false },
         hide: isMobile,
       },
       {
@@ -266,6 +270,8 @@ const EmployeeGrid = () => {
         minWidth: isMobile ? 120 : 170,
         flex: isMobile ? 1 : 1.3,
         cellStyle: { color: "hsl(220 25% 18%)", fontWeight: 500 },
+        filter: "agSetColumnFilter",
+        filterParams: { suppressSelectAll: false, suppressSorting: false },
         hide: isMobile,
       },
       {
@@ -273,6 +279,8 @@ const EmployeeGrid = () => {
         field: "location",
         minWidth: isMobile ? 90 : 110,
         flex: isMobile ? 0.6 : 0.8,
+        filter: "agSetColumnFilter",
+        filterParams: { suppressSelectAll: false, suppressSorting: false },
       },
       {
         headerName: "Salary",
@@ -283,6 +291,8 @@ const EmployeeGrid = () => {
         cellStyle: { fontWeight: 600, fontFeatureSettings: "'tnum'" },
         valueFormatter: (p: ValueFormatterParams) =>
           p.value != null ? `$${p.value.toLocaleString()}` : "",
+        filter: "agNumberColumnFilter",
+        filterParams: { filterOptions: ["equals", "greaterThan", "lessThan", "inRange"], defaultOption: "greaterThan" },
       },
       {
         headerName: "Rating",
@@ -290,6 +300,8 @@ const EmployeeGrid = () => {
         minWidth: isMobile ? 80 : 110,
         flex: isMobile ? 0.6 : 0.8,
         cellRenderer: RatingRenderer,
+        filter: "agNumberColumnFilter",
+        filterParams: { filterOptions: ["equals", "greaterThan", "lessThan", "inRange"], defaultOption: "greaterThan" },
       },
       {
         headerName: "Projects",
@@ -298,6 +310,8 @@ const EmployeeGrid = () => {
         flex: isMobile ? 0.4 : 0.5,
         type: "numericColumn",
         cellStyle: { fontWeight: 600, fontFeatureSettings: "'tnum'" },
+        filter: "agNumberColumnFilter",
+        filterParams: { filterOptions: ["equals", "greaterThan", "lessThan", "inRange"], defaultOption: "greaterThan" },
       },
       {
         headerName: "Skills",
@@ -307,7 +321,9 @@ const EmployeeGrid = () => {
         maxWidth: isMobile ? 120 : 150,
         cellRenderer: SkillsRenderer,
         sortable: false,
-        filter: true,
+        filter: "agTextColumnFilter",
+        filterValueGetter: (p) => Array.isArray(p.data?.skills) ? p.data.skills.join(", ") : "",
+        filterParams: { filterOptions: ["contains"], defaultOption: "contains" },
         cellStyle: { overflow: "hidden", padding: isMobile ? "0 8px" : "0 12px" },
         hide: isMobile,
       },
@@ -387,7 +403,7 @@ const EmployeeGrid = () => {
           </button>
         </div>
       )}
-      <div className="ag-theme-alpine ag-theme-custom w-full h-[400px] sm:h-[500px] rounded-xl border border-border overflow-hidden bg-card shadow-sm">
+      <div className="ag-theme-alpine ag-theme-custom w-full h-[400px] sm:h-[400px] rounded-xl border border-border overflow-hidden bg-card shadow-sm">
         <AgGridReact<Employee>
           ref={gridRef}
           rowData={employees}
