@@ -20,7 +20,7 @@ const StatusRenderer = (params: ICellRendererParams<Employee>) => {
   const active = params.value;
   return (
     <span
-      className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold tracking-wide ${
+      className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[14px] font-semibold tracking-wide ${
         active
           ? "bg-success/12 text-success"
           : "bg-destructive/12 text-destructive"
