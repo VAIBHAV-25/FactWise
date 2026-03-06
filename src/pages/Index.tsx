@@ -17,11 +17,7 @@ const Index = () => {
     <div className="min-h-screen bg-background flex flex-col">
 
       {/* ── Hero Header ── */}
-      <header className="sticky top-0 z-50 overflow-hidden border-b border-white/20 bg-background/60 backdrop-blur-xl supports-[backdrop-filter]:bg-background/40">
-        {/* Gradient mesh background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 via-transparent to-purple-600/10 pointer-events-none" />
-        <div className="absolute -top-32 -left-32 w-96 h-96 bg-blue-500/15 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -top-20 right-0 w-72 h-72 bg-purple-500/15 rounded-full blur-3xl pointer-events-none animate-pulse-slow" />
+      <header className="sticky top-0 z-50 overflow-hidden border-b border-border/60 bg-background/60 backdrop-blur-xl supports-[backdrop-filter]:bg-background/40">
 
         <div className="relative max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -97,7 +93,6 @@ const Index = () => {
             <div>
               <h2 className="text-base sm:text-lg font-bold text-foreground tracking-tight flex items-center gap-2">
                 Employee Directory
-                <span className="px-2 py-0.5 rounded-md bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wider">Live</span>
               </h2>
               <p className="text-xs text-muted-foreground mt-0.5">
                 {totalEmployees} employees across {departments} departments · {locations} locations
