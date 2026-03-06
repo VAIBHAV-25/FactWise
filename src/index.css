@@ -122,6 +122,11 @@
   letter-spacing: 0.06em;
 }
 
+.ag-theme-custom .ag-header-cell-menu-button {
+  order: -1;
+  margin-right: 4px;
+}
+
 .ag-theme-custom .ag-header {
   border-bottom: 2px solid hsl(220 16% 90%);
 }

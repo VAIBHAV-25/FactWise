@@ -11,7 +11,7 @@ import type {
 } from "ag-grid-community";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
-import { RotateCcw, Mail, MapPin, Briefcase, DollarSign, Calendar, User, Star, FolderKanban, Users } from "lucide-react";
+import { RotateCcw, Mail, MapPin, Briefcase, DollarSign, Calendar, User, Star, FolderKanban, Users, Filter } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { employees, Employee } from "@/data/employees";
@@ -139,7 +139,8 @@ const HeaderWithTooltip = (params: IHeaderParams) => {
     };
   }, []);
 
-  const displayName = params.displayName || params.colDef?.headerName || "";
+  const displayName = params.displayName || "";
+  const enableFiltering = params.column?.getColDef().filter !== false;
 
   const headerText = (
     <div
@@ -151,12 +152,31 @@ const HeaderWithTooltip = (params: IHeaderParams) => {
     </div>
   );
 
+  const filterButton = enableFiltering ? (
+    <span 
+      className="ag-header-icon" 
+      role="button"
+      onClick={(e) => {
+        e.stopPropagation();
+        const headerElement = (e.currentTarget as HTMLElement).closest('.ag-header-cell') as HTMLElement;
+        if (headerElement) {
+          params.showColumnMenu(headerElement);
+        }
+      }}
+      style={{ cursor: "pointer", display: "flex", alignItems: "center", padding: "0 4px" }}
+      title="Filter"
+    >
+      <Filter className="h-3.5 w-3.5 text-muted-foreground hover:text-foreground" />
+    </span>
+  ) : null;
+
   if (isTruncated) {
     return (
-      <div className="ag-header-cell-label" style={{ width: "100%" }}>
+      <div className="ag-header-cell-label" style={{ width: "100%", display: "flex", alignItems: "center", gap: "4px", flexDirection: "row" }}>
+        {filterButton && <div style={{ order: -1, display: "flex", alignItems: "center" }}>{filterButton}</div>}
         <Tooltip>
           <TooltipTrigger asChild>
-            <div style={{ width: "100%", cursor: "help" }}>
+            <div style={{ flex: 1, minWidth: 0, cursor: "help", order: 0 }}>
               {headerText}
             </div>
           </TooltipTrigger>
@@ -169,8 +189,11 @@ const HeaderWithTooltip = (params: IHeaderParams) => {
   }
 
   return (
-    <div className="ag-header-cell-label" style={{ width: "100%" }}>
-      {headerText}
+    <div className="ag-header-cell-label" style={{ width: "100%", display: "flex", alignItems: "center", gap: "4px", flexDirection: "row" }}>
+      {filterButton && <div style={{ order: -1, display: "flex", alignItems: "center" }}>{filterButton}</div>}
+      <div style={{ flex: 1, minWidth: 0, order: 0 }}>
+        {headerText}
+      </div>
     </div>
   );
 };
@@ -198,7 +221,7 @@ const EmployeeGrid = () => {
       {
         headerName: "Employee",
         field: "firstName",
-        minWidth: 220,
+        minWidth: 212,
         flex: 2,
         valueGetter: (p) => `${p.data?.firstName} ${p.data?.lastName}`,
         cellRenderer: (params: ICellRendererParams<Employee>) => (
@@ -209,8 +232,8 @@ const EmployeeGrid = () => {
               </span>
             </div>
             <div className="min-w-0">
-              <p className="text-[13px] font-semibold text-foreground leading-tight truncate">{params.value}</p>
-              <p className="text-[11px] text-muted-foreground leading-tight mt-0.5 truncate">{params.data?.email}</p>
+              <p className="text-[12px] font-semibold text-foreground leading-tight truncate">{params.value}</p>
+              <p className="text-[10px] text-muted-foreground leading-tight mt-0.5 truncate">{params.data?.email}</p>
             </div>
           </div>
         ),
@@ -249,7 +272,7 @@ const EmployeeGrid = () => {
       {
         headerName: "Rating",
         field: "performanceRating",
-        minWidth: 120,
+        minWidth: 110,
         flex: 0.8,
         cellRenderer: RatingRenderer,
       },
@@ -269,7 +292,7 @@ const EmployeeGrid = () => {
         maxWidth: 150,
         cellRenderer: SkillsRenderer,
         sortable: false,
-        filter: false,
+        filter: true,
         cellStyle: { overflow: "hidden", padding: "0 12px" },
       },
       {
@@ -278,6 +301,18 @@ const EmployeeGrid = () => {
         minWidth: 105,
         flex: 0.7,
         cellRenderer: StatusRenderer,
+        filter: "agSetColumnFilter",
+        filterParams: {
+          values: () => [true, false],
+          valueFormatter: (params: { value: boolean }) => {
+            return params.value === true ? "Active" : "Inactive";
+          },
+          suppressSelectAll: false,
+          suppressSorting: true,
+        },
+        valueFormatter: (params: ValueFormatterParams) => {
+          return params.value === true ? "Active" : "Inactive";
+        },
       },
     ],
     []
@@ -290,7 +325,9 @@ const EmployeeGrid = () => {
       filter: true,
       suppressMovable: false,
       headerComponent: HeaderWithTooltip,
+      suppressHeaderMenuButton: false,
       cellStyle: { overflow: "hidden", cursor: "pointer" },
+      menuTabs: ["filterMenuTab", "generalMenuTab"],
     }),
     []
   );
@@ -328,7 +365,7 @@ const EmployeeGrid = () => {
           </button>
         </div>
       )}
-      <div className="ag-theme-alpine ag-theme-custom w-full h-[620px] rounded-xl border border-border overflow-hidden bg-card shadow-sm">
+      <div className="ag-theme-alpine ag-theme-custom w-full h-[400px] rounded-xl border border-border overflow-hidden bg-card shadow-sm">
         <AgGridReact<Employee>
           ref={gridRef}
           rowData={employees}
@@ -341,11 +378,12 @@ const EmployeeGrid = () => {
           animateRows
           rowSelection="multiple"
           pagination
-          paginationPageSize={10}
-          paginationPageSizeSelector={[10, 20, 50]}
+          paginationPageSize={5}
+          paginationPageSizeSelector={[5, 10, 20, 50]}
           suppressCellFocus
           enableCellTextSelection
           domLayout="normal"
+          suppressMenuHide={true}
         />
       </div>
 
@@ -391,7 +429,7 @@ const EmployeeGrid = () => {
                   <Briefcase className="h-5 w-5 text-muted-foreground mt-0.5 shrink-0" />
                   <div>
                     <p className="text-xs text-muted-foreground font-medium">Position</p>
-                    <p className="text-sm font-semibold text-foreground">{selectedEmployee.position}</p>
+                    <p className="text-xs font-semibold text-foreground">{selectedEmployee.position}</p>
                   </div>
                 </div>
 
