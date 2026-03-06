@@ -17,28 +17,28 @@ const Index = () => {
     <div className="min-h-screen bg-background flex flex-col">
 
       {/* ── Hero Header ── */}
-      <header className="relative overflow-hidden border-b border-border/60">
+      <header className="sticky top-0 z-50 overflow-hidden border-b border-white/20 bg-background/60 backdrop-blur-xl supports-[backdrop-filter]:bg-background/40">
         {/* Gradient mesh background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/6 via-background to-purple-600/4 pointer-events-none" />
-        <div className="absolute -top-32 -left-32 w-96 h-96 bg-blue-500/8 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -top-20 right-0 w-72 h-72 bg-purple-500/6 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 via-transparent to-purple-600/10 pointer-events-none" />
+        <div className="absolute -top-32 -left-32 w-96 h-96 bg-blue-500/15 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -top-20 right-0 w-72 h-72 bg-purple-500/15 rounded-full blur-3xl pointer-events-none animate-pulse-slow" />
 
-        <div className="relative max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-7">
+        <div className="relative max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
 
             {/* Brand */}
-            <div className="flex items-center gap-3 sm:gap-4 min-w-0">
-              <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center shadow-lg shadow-blue-500/25 shrink-0">
+            <div className="flex items-center gap-3 sm:gap-4 min-w-0 group cursor-pointer">
+              <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-500/30 shrink-0 transition-transform duration-500 group-hover:scale-105 group-hover:rotate-3">
                 <BarChart3 className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
               </div>
               <div className="min-w-0">
-                <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground tracking-tight truncate">
+                <h1 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight truncate text-foreground transition-colors duration-300">
                   FactWise{" "}
-                  <span className="bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent">
+                  <span className="bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-500 bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
                     Insights
                   </span>
                 </h1>
-                <p className="text-xs sm:text-sm text-muted-foreground mt-0.5 truncate">
+                <p className="text-xs sm:text-sm text-muted-foreground mt-0.5 truncate font-medium">
                   Workforce analytics &amp; people management
                 </p>
               </div>
@@ -46,14 +46,14 @@ const Index = () => {
 
             {/* Badges */}
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-200/70 text-emerald-700 text-xs font-semibold whitespace-nowrap">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-semibold whitespace-nowrap shadow-sm backdrop-blur-md transition-transform hover:scale-105">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
                 {activeCount} Active
               </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 border border-slate-200/70 text-slate-600 text-xs font-semibold whitespace-nowrap">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-500/10 border border-slate-500/20 text-slate-600 dark:text-slate-400 text-xs font-semibold whitespace-nowrap shadow-sm backdrop-blur-md transition-transform hover:scale-105">
                 {inactiveCount} Inactive
               </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-200/70 text-blue-700 text-xs font-semibold whitespace-nowrap">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-600 dark:text-blue-400 text-xs font-semibold whitespace-nowrap shadow-sm backdrop-blur-md transition-transform hover:scale-105">
                 {totalEmployees} Total
               </span>
             </div>
@@ -70,21 +70,34 @@ const Index = () => {
             Overview
           </p>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
-            <StatCard title="Employees"   value={totalEmployees}                             icon={Users}       color="blue"   />
-            <StatCard title="Avg Salary"  value={`$${avgSalary.toLocaleString()}`}           icon={DollarSign}  color="green"  />
-            <StatCard title="Avg Rating"  value={`${avgRating}/5`}                           icon={Star}        color="amber"  trend="up" />
-            <StatCard title="Projects"    value={totalProjects}                              icon={TrendingUp}  color="purple" />
-            <StatCard title="Departments" value={departments}                               icon={Briefcase}   color="teal"   />
-            <StatCard title="Locations"   value={locations}                                 icon={MapPin}      color="rose"   />
+            <div className="animate-fade-in-up" style={{ animationDelay: "0ms" }}>
+              <StatCard title="Employees"   value={totalEmployees}                             icon={Users}       color="blue"   />
+            </div>
+            <div className="animate-fade-in-up" style={{ animationDelay: "75ms" }}>
+              <StatCard title="Avg Salary"  value={`$${avgSalary.toLocaleString()}`}           icon={DollarSign}  color="green"  />
+            </div>
+            <div className="animate-fade-in-up" style={{ animationDelay: "150ms" }}>
+              <StatCard title="Avg Rating"  value={`${avgRating}/5`}                           icon={Star}        color="amber"  trend="up" />
+            </div>
+            <div className="animate-fade-in-up" style={{ animationDelay: "225ms" }}>
+              <StatCard title="Projects"    value={totalProjects}                              icon={TrendingUp}  color="purple" />
+            </div>
+            <div className="animate-fade-in-up" style={{ animationDelay: "300ms" }}>
+              <StatCard title="Departments" value={departments}                               icon={Briefcase}   color="teal"   />
+            </div>
+            <div className="animate-fade-in-up" style={{ animationDelay: "375ms" }}>
+              <StatCard title="Locations"   value={locations}                                 icon={MapPin}      color="rose"   />
+            </div>
           </div>
         </div>
 
         {/* Employee Grid */}
-        <div>
+        <div className="animate-fade-in-up" style={{ animationDelay: "450ms" }}>
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
             <div>
-              <h2 className="text-base sm:text-lg font-bold text-foreground tracking-tight">
+              <h2 className="text-base sm:text-lg font-bold text-foreground tracking-tight flex items-center gap-2">
                 Employee Directory
+                <span className="px-2 py-0.5 rounded-md bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wider">Live</span>
               </h2>
               <p className="text-xs text-muted-foreground mt-0.5">
                 {totalEmployees} employees across {departments} departments · {locations} locations

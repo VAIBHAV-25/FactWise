@@ -4,6 +4,39 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  .animate-fade-in-up {
+    animation: fade-in-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  .animate-pulse-slow {
+    animation: pulse-slow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  .animate-gradient {
+    animation: gradient-x 4s linear infinite;
+  }
+
+  @keyframes fade-in-up {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes pulse-slow {
+    0%, 100% { opacity: 0.15; transform: scale(1); }
+    50% { opacity: 0.25; transform: scale(1.05); }
+  }
+
+  @keyframes gradient-x {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+  }
+}
+
 @layer base {
   :root {
     --background: 220 20% 97%;
@@ -229,69 +262,183 @@
   padding-bottom: 0 !important;
 }
 
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   AG Grid – Premium Pagination Bar
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 .ag-theme-custom .ag-paging-panel {
-  border-top: 1px solid hsl(220 16% 92%);
+  border-top: 1px solid hsl(220 16% 91%);
+  background: linear-gradient(to right, hsl(220 14% 97%), hsl(220 20% 99%));
   padding: 12px 20px;
-  font-size: 12px;
-  color: hsl(220 10% 46%);
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: hsl(220 15% 40%);
   margin-top: -1px !important;
   margin-bottom: 0 !important;
-  padding-top: 12px !important;
 }
 
-.ag-theme-custom .ag-body-container {
-  margin-bottom: 0 !important;
-  padding-bottom: 0 !important;
+/* Row-summary text  "1 to 10 of 20" */
+.ag-theme-custom .ag-paging-row-summary-panel {
+  font-size: 11px;
+  font-weight: 500;
+  color: hsl(220 15% 45%);
+  white-space: nowrap;
 }
 
-.ag-theme-custom .ag-body-container-wrapper {
-  margin-bottom: 0 !important;
-  padding-bottom: 0 !important;
+/* Page-size selector wrapper */
+.ag-theme-custom .ag-paging-page-size {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-@media (max-width: 768px) {
+.ag-theme-custom .ag-paging-page-size span {
+  font-size: 11px;
+  font-weight: 500;
+  color: hsl(220 15% 45%);
+  white-space: nowrap;
+}
+
+/* Page-size Select dropdown */
+.ag-theme-custom .ag-paging-page-size select,
+.ag-theme-custom .ag-page-size-selector select {
+  appearance: none;
+  -webkit-appearance: none;
+  height: 34px;
+  padding: 0 30px 0 12px;
+  border: 1px solid hsl(220 16% 85%);
+  border-radius: 10px;
+  background-color: hsl(0 0% 100%);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: hsl(220 25% 18%);
+  cursor: pointer;
+  box-shadow: 0 1px 2px hsl(220 20% 10% / 0.04);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  outline: none;
+}
+
+.ag-theme-custom .ag-paging-page-size select:hover,
+.ag-theme-custom .ag-page-size-selector select:hover {
+  border-color: hsl(220 72% 50% / 0.5);
+}
+
+.ag-theme-custom .ag-paging-page-size select:focus,
+.ag-theme-custom .ag-page-size-selector select:focus {
+  border-color: hsl(220 72% 50%);
+  box-shadow: 0 0 0 3px hsl(220 72% 50% / 0.15);
+}
+
+/* Number panel: prev / page indicator / next */
+.ag-theme-custom .ag-paging-number-panel {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* All paging nav buttons (First, Prev, Next, Last) */
+.ag-theme-custom .ag-paging-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 34px;
+  height: 34px;
+  padding: 0 8px;
+  border-radius: 10px;
+  border: 1px solid hsl(220 16% 88%);
+  background: hsl(0 0% 100%);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: hsl(220 20% 28%);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 1px 3px hsl(220 20% 10% / 0.04);
+  outline: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.ag-theme-custom .ag-paging-button:hover:not([disabled]) {
+  border-color: hsl(220 72% 50%);
+  color: hsl(220 72% 50%);
+  background: hsl(220 72% 50% / 0.06);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px hsl(220 72% 50% / 0.15);
+}
+
+.ag-theme-custom .ag-paging-button:active:not([disabled]) {
+  transform: translateY(0);
+  background: hsl(220 72% 50% / 0.12);
+  box-shadow: none;
+}
+
+/* Disabled state */
+.ag-theme-custom .ag-paging-button[disabled] {
+  opacity: 0.3;
+  cursor: not-allowed;
+  pointer-events: none;
+  background: hsl(220 14% 97%);
+}
+
+/* "Page X of Y" chip */
+.ag-theme-custom .ag-paging-page-summary-panel {
+  display: inline-flex;
+  align-items: center;
+  height: 34px;
+  padding: 0 14px;
+  border-radius: 10px;
+  border: 1px solid hsl(220 16% 85%);
+  background: linear-gradient(to bottom, hsl(0 0% 100%), hsl(220 20% 98%));
+  font-size: 11px;
+  font-weight: 600;
+  color: hsl(220 20% 30%);
+  white-space: nowrap;
+  gap: 5px;
+  box-shadow: 0 1px 2px hsl(220 20% 10% / 0.03);
+}
+
+/* The current-page number inside the summary */
+.ag-theme-custom .ag-paging-page-summary-panel .ag-paging-description {
+  color: hsl(220 72% 50%);
+  font-weight: 700;
+  font-size: 12px;
+}
+
+/* ── Mobile Responsive Pagination ── */
+@media (max-width: 640px) {
   .ag-theme-custom .ag-paging-panel {
-    padding: 8px 12px;
-    font-size: 10px;
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .ag-theme-custom .ag-paging-panel>* {
-    flex: 1;
-    min-width: 0;
-  }
-
-  .ag-theme-custom .ag-paging-panel .ag-paging-row-summary-panel,
-  .ag-theme-custom .ag-paging-panel .ag-paging-page-size-panel,
-  .ag-theme-custom .ag-paging-panel .ag-paging-number-panel {
-    display: flex;
-    align-items: center;
+    padding: 10px 12px;
+    flex-direction: row;
+    flex-wrap: wrap;
     justify-content: center;
-    margin: 4px 0;
+    gap: 10px;
   }
 
-  .ag-theme-custom .ag-paging-panel .ag-paging-number-panel {
-    order: -1;
+  .ag-theme-custom .ag-paging-row-summary-panel {
+    width: 100%;
+    text-align: center;
+    order: 2;
   }
 
-  .ag-theme-custom .ag-paging-panel button {
-    min-width: 32px;
-    height: 32px;
-    padding: 4px 8px;
-    font-size: 10px;
+  .ag-theme-custom .ag-paging-page-size {
+    order: 3;
+    width: 100%;
+    justify-content: center;
   }
 
-  .ag-theme-custom .ag-paging-panel select {
-    min-width: 60px;
-    height: 32px;
-    padding: 4px 8px;
-    font-size: 10px;
+  .ag-theme-custom .ag-paging-number-panel {
+    order: 1;
+    width: 100%;
+    justify-content: center;
   }
 }
 
@@ -430,6 +577,8 @@
    .ag-picker-field-wrapper (text) + .ag-picker-field-icon (arrow).
    Style the OUTER container only — do NOT touch the wrapper child. */
 .ag-theme-custom .ag-filter-body-wrapper .ag-picker-field {
+  position: relative !important;
+  z-index: 100 !important;
   display: flex !important;
   align-items: center !important;
   height: 36px !important;
@@ -523,39 +672,99 @@
   padding: 0 !important;
 }
 
-/* ── AND / OR condition operator pills ── */
+/* ── AND / OR condition operator ── */
 .ag-theme-custom .ag-filter-condition-operator {
   display: flex !important;
-  gap: 6px !important;
   align-items: center !important;
+  justify-content: space-evenly !important; /* Distribute evenly across full width */
+  margin: 12px 0 8px !important;
+  padding-bottom: 4px !important;
+  width: 100% !important;
 }
 
-.ag-theme-custom .ag-filter-condition-operator label {
-  flex: 1 !important;
+/* Force margin on ANY immediate child wrapper AG Grid creates */
+.ag-theme-custom .ag-filter-condition-operator > * {
+  margin: 0 16px !important;
+}
+
+.ag-theme-custom .ag-filter-condition-operator .ag-radio-button {
   display: flex !important;
   align-items: center !important;
-  justify-content: center !important;
-  gap: 5px !important;
-  padding: 5px 0 !important;
-  font-size: 11px !important;
-  font-weight: 700 !important;
-  letter-spacing: 0.05em !important;
-  color: hsl(220 10% 46%) !important;
-  border: 1.5px solid hsl(220 16% 86%) !important;
-  border-radius: 8px !important;
   cursor: pointer !important;
-  transition: border-color 0.12s, background 0.12s, color 0.12s !important;
-  user-select: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
-.ag-theme-custom .ag-filter-condition-operator label:has(input:checked) {
-  border-color: hsl(220 72% 50%) !important;
-  background: hsl(220 72% 50% / 0.09) !important;
-  color: hsl(220 72% 50%) !important;
-}
-
-.ag-theme-custom .ag-filter-condition-operator input[type="radio"] {
+/* Hide any mysterious spacer divs AG Grid injects between ring and text */
+.ag-theme-custom .ag-filter-condition-operator .ag-radio-button > :not(.ag-radio-button-input-wrapper):not(.ag-label) {
   display: none !important;
+}
+
+.ag-theme-custom .ag-filter-condition-operator .ag-radio-button .ag-label {
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  color: hsl(220 20% 28%) !important;
+  cursor: pointer !important;
+  margin: 0 0 0 6px !important; /* Exact 6px visual gap */
+  padding: 0 !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+}
+
+/* Radio button rings */
+.ag-theme-custom .ag-radio-button-input-wrapper {
+  position: relative !important;
+  width: 18px !important;
+  height: 18px !important;
+  border-radius: 50% !important;
+  border: 1.5px solid hsl(220 16% 70%) !important;
+  background: hsl(0 0% 100%) !important;
+  transition: all 0.15s !important;
+  flex-shrink: 0 !important;
+  box-sizing: border-box !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.ag-theme-custom .ag-radio-button-input-wrapper::before {
+  display: none !important; /* hide default AG grid icons if any */
+}
+
+.ag-theme-custom .ag-radio-button-input-wrapper.ag-checked {
+  border-color: hsl(220 72% 50%) !important;
+  background: hsl(220 72% 50% / 0.1) !important;
+  box-shadow: 0 0 0 3px hsl(220 72% 50% / 0.15) !important;
+}
+
+/* Inner dot */
+.ag-theme-custom .ag-radio-button-input-wrapper::after {
+  content: "" !important;
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) scale(0) !important;
+  width: 10px !important;
+  height: 10px !important;
+  border-radius: 50% !important;
+  background: hsl(220 72% 50%) !important;
+  transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+}
+
+.ag-theme-custom .ag-radio-button-input-wrapper.ag-checked::after {
+  transform: translate(-50%, -50%) scale(1) !important;
+}
+
+/* Hide actual input */
+.ag-theme-custom .ag-radio-button-input {
+  position: absolute !important;
+  opacity: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0 !important;
+  cursor: pointer !important;
 }
 
 /* ── Apply / Reset / Clear button row ── */
