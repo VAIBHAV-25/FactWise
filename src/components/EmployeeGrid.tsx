@@ -7,6 +7,7 @@ import type {
   GridReadyEvent,
   GridApi,
   IHeaderParams,
+  CellClickedEvent,
 } from "ag-grid-community";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
@@ -55,7 +56,9 @@ const RatingRenderer = (params: ICellRendererParams<Employee>) => {
 
 const SkillsRenderer = (params: ICellRendererParams<Employee>) => {
   const skills = params.value as string[];
-  return (
+  const allSkillsText = skills.join(", ");
+  
+  const skillsContent = (
     <div className="flex items-center gap-1 min-w-0 w-full" style={{ maxWidth: "100%", overflow: "hidden" }}>
       {skills.slice(0, 2).map((skill) => (
         <span
@@ -71,6 +74,29 @@ const SkillsRenderer = (params: ICellRendererParams<Employee>) => {
         <span className="text-[10px] text-muted-foreground font-medium shrink-0 whitespace-nowrap">+{skills.length - 2}</span>
       )}
     </div>
+  );
+
+  return (
+    <Tooltip delayDuration={200}>
+      <TooltipTrigger asChild>
+        <div className="w-full">
+          {skillsContent}
+        </div>
+      </TooltipTrigger>
+      <TooltipContent 
+        side="top" 
+        align="start"
+        sideOffset={8}
+        className="!z-[9999] max-w-[200px] w-[200px]"
+        avoidCollisions={true}
+        collisionPadding={8}
+      >
+        <div className="w-full">
+          <p className="text-xs font-semibold mb-1.5">All Skills:</p>
+          <p className="text-xs text-muted-foreground break-words whitespace-normal leading-relaxed">{allSkillsText}</p>
+        </div>
+      </TooltipContent>
+    </Tooltip>
   );
 };
 
@@ -176,15 +202,7 @@ const EmployeeGrid = () => {
         flex: 2,
         valueGetter: (p) => `${p.data?.firstName} ${p.data?.lastName}`,
         cellRenderer: (params: ICellRendererParams<Employee>) => (
-          <div 
-            className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity"
-            onClick={() => {
-              if (params.data) {
-                setSelectedEmployee(params.data);
-                setIsDialogOpen(true);
-              }
-            }}
-          >
+          <div className="flex items-center gap-3 h-full w-full">
             <div className="h-9 w-9 rounded-full bg-primary/8 flex items-center justify-center shrink-0 border border-primary/15">
               <span className="text-xs font-bold text-primary">
                 {params.data?.firstName?.[0]}{params.data?.lastName?.[0]}
@@ -272,7 +290,7 @@ const EmployeeGrid = () => {
       filter: true,
       suppressMovable: false,
       headerComponent: HeaderWithTooltip,
-      cellStyle: { overflow: "hidden" },
+      cellStyle: { overflow: "hidden", cursor: "pointer" },
     }),
     []
   );
@@ -283,6 +301,13 @@ const EmployeeGrid = () => {
 
   const onGridSizeChanged = useCallback((params: { api: GridApi }) => {
     params.api.sizeColumnsToFit();
+  }, []);
+
+  const onCellClicked = useCallback((event: CellClickedEvent<Employee>) => {
+    if (event.data) {
+      setSelectedEmployee(event.data);
+      setIsDialogOpen(true);
+    }
   }, []);
 
   const formatDate = (dateString: string) => {
@@ -312,6 +337,7 @@ const EmployeeGrid = () => {
           onGridReady={onGridReady}
           onGridSizeChanged={onGridSizeChanged}
           onFilterChanged={onFilterChanged}
+          onCellClicked={onCellClicked}
           animateRows
           rowSelection="multiple"
           pagination
