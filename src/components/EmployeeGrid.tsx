@@ -11,7 +11,7 @@ import type {
 } from "ag-grid-community";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
-import { RotateCcw, Mail, MapPin, Briefcase, DollarSign, Calendar, User, Star, FolderKanban, Users, Filter } from "lucide-react";
+import { RotateCcw, Mail, MapPin, Briefcase, DollarSign, Calendar, User, Star, FolderKanban, Users, Filter, Search, X } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { employees, Employee } from "@/data/employees";
@@ -204,6 +204,7 @@ const EmployeeGrid = () => {
   const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [quickFilterText, setQuickFilterText] = useState("");
 
   useEffect(() => {
     const checkMobile = () => {
@@ -227,6 +228,8 @@ const EmployeeGrid = () => {
     setIsFiltered(false);
   }, []);
 
+  const clearSearch = useCallback(() => setQuickFilterText(""), []);
+
   const columnDefs = useMemo<ColDef<Employee>[]>(() => {
     return [
       {
@@ -240,11 +243,17 @@ const EmployeeGrid = () => {
         filterValueGetter: (p) => `${p.data?.firstName} ${p.data?.lastName}`,
         filter: "agTextColumnFilter",
         filterParams: { filterOptions: ["contains", "startsWith", "endsWith"], defaultOption: "contains" },
-        cellRenderer: (params: ICellRendererParams<Employee>) => (
+        cellRenderer: (params: ICellRendererParams<Employee>) => {
+          const initials = `${params.data?.firstName?.[0] ?? ""}${params.data?.lastName?.[0] ?? ""}`;
+          const hue = ((params.data?.id ?? 0) * 47) % 360;
+          return (
           <div className="flex items-center gap-2 sm:gap-3 h-full w-full">
-            <div className="h-8 w-8 sm:h-9 sm:w-9 rounded-full bg-primary/8 flex items-center justify-center shrink-0 border border-primary/15">
-              <span className="text-[10px] sm:text-xs font-bold text-primary">
-                {params.data?.firstName?.[0]}{params.data?.lastName?.[0]}
+            <div
+              className="h-8 w-8 sm:h-9 sm:w-9 rounded-full flex items-center justify-center shrink-0 shadow-sm"
+              style={{ background: `linear-gradient(135deg, hsl(${hue} 70% 58%), hsl(${(hue + 40) % 360} 70% 45%))` }}
+            >
+              <span className="text-[10px] sm:text-xs font-bold text-white">
+                {initials}
               </span>
             </div>
             <div className="min-w-0">
@@ -252,7 +261,8 @@ const EmployeeGrid = () => {
               <p className="text-[9px] sm:text-[10px] text-muted-foreground leading-tight mt-0.5 truncate">{params.data?.email}</p>
             </div>
           </div>
-        ),
+          );
+        },
       },
       {
         headerName: "Department",
@@ -390,20 +400,45 @@ const EmployeeGrid = () => {
   };
 
   return (
-    <div className="space-y-2 w-full overflow-hidden">
-      {isFiltered && (
-        <div className="flex items-center justify-end px-2 sm:px-0">
+    <div className="space-y-3 w-full overflow-hidden">
+      {/* Toolbar: search + filter actions */}
+      <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+        {/* Search box */}
+        <div className="relative flex-1 min-w-[160px] max-w-xs">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground pointer-events-none" />
+          <input
+            type="text"
+            placeholder="Search employees…"
+            value={quickFilterText}
+            onChange={(e) => setQuickFilterText(e.target.value)}
+            className="w-full h-9 pl-9 pr-8 rounded-xl border border-border bg-card text-sm text-foreground placeholder:text-muted-foreground/70 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/50 transition-all"
+          />
+          {quickFilterText && (
+            <button
+              onClick={clearSearch}
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <X className="h-3.5 w-3.5" />
+            </button>
+          )}
+        </div>
+
+        {/* Spacer */}
+        <div className="flex-1 hidden sm:block" />
+
+        {/* Filter indicator + reset */}
+        {isFiltered && (
           <button
             onClick={clearAllFilters}
-            className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg bg-muted hover:bg-muted/80 text-muted-foreground text-[10px] sm:text-xs font-semibold transition-colors"
+            className="inline-flex items-center gap-1.5 h-9 px-3 rounded-xl bg-primary/8 hover:bg-primary/14 border border-primary/20 text-primary text-xs font-semibold transition-all"
           >
-            <RotateCcw className="h-3 sm:h-3.5 w-3 sm:w-3.5" />
-            <span className="hidden sm:inline">Reset Filter</span>
-            <span className="sm:hidden">Reset</span>
+            <RotateCcw className="h-3.5 w-3.5" />
+            Reset Filters
           </button>
-        </div>
-      )}
-      <div className="ag-theme-alpine ag-theme-custom w-full h-[400px] sm:h-[400px] rounded-xl border border-border overflow-hidden bg-card shadow-sm">
+        )}
+      </div>
+
+      <div className="ag-theme-alpine ag-theme-custom w-full h-[400px] sm:h-[520px] rounded-2xl border border-border overflow-hidden bg-card shadow-sm">
         <AgGridReact<Employee>
           ref={gridRef}
           rowData={employees}
@@ -413,10 +448,11 @@ const EmployeeGrid = () => {
           onGridSizeChanged={onGridSizeChanged}
           onFilterChanged={onFilterChanged}
           onCellClicked={onCellClicked}
+          quickFilterText={quickFilterText}
           animateRows
           rowSelection="multiple"
           pagination
-          paginationPageSize={5}
+          paginationPageSize={10}
           paginationPageSizeSelector={[5, 10, 20, 50]}
           suppressCellFocus
           enableCellTextSelection

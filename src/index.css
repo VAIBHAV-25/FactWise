@@ -85,17 +85,29 @@
   }
 
   body {
-    @apply bg-background text-foreground font-sans antialiased;
+    @apply text-foreground font-sans antialiased;
+    background: hsl(220 20% 97%);
+    background-image:
+      radial-gradient(ellipse at 0% 0%, hsl(220 72% 50% / 0.04) 0%, transparent 60%),
+      radial-gradient(ellipse at 100% 100%, hsl(280 60% 50% / 0.03) 0%, transparent 60%);
+    min-height: 100vh;
+  }
+
+  .dark body {
+    background: hsl(222 25% 8%);
+    background-image:
+      radial-gradient(ellipse at 0% 0%, hsl(220 72% 56% / 0.06) 0%, transparent 60%),
+      radial-gradient(ellipse at 100% 100%, hsl(280 60% 50% / 0.04) 0%, transparent 60%);
   }
 }
 
 .ag-theme-custom {
   --ag-background-color: hsl(0 0% 100%);
-  --ag-header-background-color: hsl(220 14% 96%);
+  --ag-header-background-color: hsl(220 18% 96.5%);
   --ag-odd-row-background-color: hsl(0 0% 100%);
-  --ag-even-row-background-color: hsl(220 20% 99%);
-  --ag-row-hover-color: hsl(220 72% 50% / 0.04);
-  --ag-selected-row-background-color: hsl(220 72% 50% / 0.08);
+  --ag-even-row-background-color: hsl(220 22% 99%);
+  --ag-row-hover-color: hsl(220 72% 50% / 0.055);
+  --ag-selected-row-background-color: hsl(220 72% 50% / 0.09);
   --ag-border-color: hsl(220 16% 92%);
   --ag-header-foreground-color: hsl(220 10% 40%);
   --ag-foreground-color: hsl(220 25% 18%);
