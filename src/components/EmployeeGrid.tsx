@@ -86,6 +86,19 @@ const DepartmentRenderer = (params: ICellRendererParams<Employee>) => {
 
 const EmployeeGrid = () => {
   const gridRef = useRef<AgGridReact<Employee>>(null);
+  const [isFiltered, setIsFiltered] = useState(false);
+
+  const onFilterChanged = useCallback(() => {
+    const api = gridRef.current?.api;
+    if (!api) return;
+    const model = api.getFilterModel();
+    setIsFiltered(Object.keys(model).length > 0);
+  }, []);
+
+  const clearAllFilters = useCallback(() => {
+    gridRef.current?.api?.setFilterModel(null);
+    setIsFiltered(false);
+  }, []);
 
   const columnDefs = useMemo<ColDef<Employee>[]>(
     () => [
