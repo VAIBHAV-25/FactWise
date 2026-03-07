@@ -416,29 +416,39 @@
 /* ── Mobile Responsive Pagination ── */
 @media (max-width: 640px) {
   .ag-theme-custom .ag-paging-panel {
-    padding: 10px 12px;
-    flex-direction: row;
-    flex-wrap: wrap;
+    padding: 8px 10px;
+    flex-wrap: nowrap;
     justify-content: center;
-    gap: 10px;
+    gap: 0;
   }
 
+  /* Hide row summary ("1 to 10 of 20") on mobile to save space */
   .ag-theme-custom .ag-paging-row-summary-panel {
-    width: 100%;
-    text-align: center;
-    order: 2;
+    display: none !important;
   }
 
+  /* Hide page-size dropdown on strict mobile to save space */
   .ag-theme-custom .ag-paging-page-size {
-    order: 3;
-    width: 100%;
-    justify-content: center;
+    display: none !important;
   }
 
+  /* Center the paging navigation buttons */
   .ag-theme-custom .ag-paging-number-panel {
-    order: 1;
-    width: 100%;
+    display: flex;
     justify-content: center;
+    width: 100%;
+  }
+
+  .ag-theme-custom .ag-paging-button {
+    min-width: 32px;
+    height: 32px;
+    padding: 0 4px;
+    margin: 0 2px;
+  }
+
+  .ag-theme-custom .ag-paging-page-summary-panel {
+    margin: 0 4px;
+    padding: 0 10px;
   }
 }
 

@@ -287,7 +287,7 @@ const EmployeeGrid = () => {
       {
         headerName: "Location",
         field: "location",
-        minWidth: isMobile ? 90 : 110,
+        minWidth: isMobile ? 110 : 110,
         flex: isMobile ? 0.6 : 0.8,
         filter: "agSetColumnFilter",
         filterParams: { suppressSelectAll: false, suppressSorting: false },
@@ -295,7 +295,7 @@ const EmployeeGrid = () => {
       {
         headerName: "Salary",
         field: "salary",
-        minWidth: isMobile ? 85 : 110,
+        minWidth: isMobile ? 110 : 110,
         flex: isMobile ? 0.6 : 0.8,
         type: "numericColumn",
         cellStyle: { fontWeight: 600, fontFeatureSettings: "'tnum'" },
@@ -307,7 +307,7 @@ const EmployeeGrid = () => {
       {
         headerName: "Rating",
         field: "performanceRating",
-        minWidth: isMobile ? 80 : 110,
+        minWidth: isMobile ? 100 : 110,
         flex: isMobile ? 0.6 : 0.8,
         cellRenderer: RatingRenderer,
         filter: "agNumberColumnFilter",
@@ -316,7 +316,7 @@ const EmployeeGrid = () => {
       {
         headerName: "Projects",
         field: "projectsCompleted",
-        minWidth: isMobile ? 65 : 80,
+        minWidth: isMobile ? 90 : 80,
         flex: isMobile ? 0.4 : 0.5,
         type: "numericColumn",
         cellStyle: { fontWeight: 600, fontFeatureSettings: "'tnum'" },
@@ -326,9 +326,9 @@ const EmployeeGrid = () => {
       {
         headerName: "Skills",
         field: "skills",
-        minWidth: isMobile ? 100 : 120,
+        minWidth: isMobile ? 120 : 120,
         flex: isMobile ? 0.8 : 1,
-        maxWidth: isMobile ? 120 : 150,
+        maxWidth: isMobile ? 150 : 150,
         cellRenderer: SkillsRenderer,
         sortable: false,
         filter: "agTextColumnFilter",
@@ -340,7 +340,7 @@ const EmployeeGrid = () => {
       {
         headerName: "Status",
         field: "isActive",
-        minWidth: isMobile ? 75 : 105,
+        minWidth: isMobile ? 130 : 105,
         flex: isMobile ? 0.5 : 0.7,
         cellRenderer: StatusRenderer,
         filter: "agSetColumnFilter",
