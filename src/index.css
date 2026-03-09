@@ -268,7 +268,9 @@
 .ag-theme-custom .ag-paging-panel {
   border-top: 1px solid hsl(220 16% 91%);
   background: linear-gradient(to right, hsl(220 14% 97%), hsl(220 20% 99%));
-  padding: 12px 20px;
+  padding: 12px 20px 14px;
+  min-height: 58px;
+  box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -279,6 +281,7 @@
   color: hsl(220 15% 40%);
   margin-top: -1px !important;
   margin-bottom: 0 !important;
+  overflow: visible !important;
 }
 
 /* Row-summary text  "1 to 10 of 20" */

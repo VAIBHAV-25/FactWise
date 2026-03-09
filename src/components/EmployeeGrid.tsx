@@ -438,7 +438,7 @@ const EmployeeGrid = () => {
         )}
       </div>
 
-      <div className="ag-theme-alpine ag-theme-custom w-full h-[400px] sm:h-[520px] rounded-2xl border border-border overflow-hidden bg-card shadow-sm">
+      <div className="ag-theme-alpine ag-theme-custom w-full h-[420px] sm:h-[420px] rounded-2xl border border-border overflow-hidden bg-card shadow-sm">
         <AgGridReact<Employee>
           ref={gridRef}
           rowData={employees}
